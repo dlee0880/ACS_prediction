@@ -13,38 +13,6 @@ from sklearn.linear_model import LogisticRegression
 # Path define #
 ###############
 
-# FINAL_PS_LR_DATASET
-FINAL_PS_LR_DATASET_PATH = 'C:/Users/CCADD/Documents/GitHub/propensity_acs_project_10185/propensity_acs_project/datasets/acs_prediction/ps_score_dataset/final_ps_LR.csv'
-OUTPUT_LR_ACS_PREDICTION_RESULT_ON_FINAL_PS_SCORE_LR_DATASET_PATH = 'C:/Users/CCADD/Documents/GitHub/propensity_acs_project_10185/raw_experiment_results/acs_prediction/ps_score_dataset/final_ps_LR_dataset/OUTPUT_LR_acs_prediction_on_final_ps_score_LR_dataset.csv'
-ACCURACY_LR_ACS_PREDICTION_RESULT_ON_FINAL_PS_SCORE_LR_DATASET_PATH = 'C:/Users/CCADD/Documents/GitHub/propensity_acs_project_10185/raw_experiment_results/acs_prediction/ps_score_dataset/final_ps_LR_dataset/ACCURACY_LR_acs_prediction_on_final_ps_score_LR_dataset.csv'
-
-# FINAL_PS_LGBM_DATASET
-FINAL_PS_LGBM_DATASET_PATH = 'C:/Users/CCADD/Documents/GitHub/propensity_acs_project_10185/propensity_acs_project/datasets/acs_prediction/ps_score_dataset/final_ps_LGBM.csv'
-OUTPUT_LR_ACS_PREDICTION_RESULT_ON_FINAL_PS_SCORE_LGBM_DATASET_PATH = 'C:/Users/CCADD/Documents/GitHub/propensity_acs_project_10185/raw_experiment_results/acs_prediction/ps_score_dataset/final_ps_LGBM_dataset/OUTPUT_LR_acs_prediction_on_final_ps_score_LGBM_dataset.csv'
-ACCURACY_LR_ACS_PREDICTION_RESULT_ON_FINAL_PS_SCORE_LGBM_DATASET_PATH = 'C:/Users/CCADD/Documents/GitHub/propensity_acs_project_10185/raw_experiment_results/acs_prediction/ps_score_dataset/final_ps_LGBM_dataset/ACCURACY_LR_acs_prediction_on_final_ps_score_LGBM_dataset.csv'
-
-# FINAL_PS_XGBOOST_DATASET
-FINAL_PS_XGBOOST_DATASET_PATH = 'C:/Users/CCADD/Documents/GitHub/propensity_acs_project_10185/propensity_acs_project/datasets/acs_prediction/ps_score_dataset/final_ps_XGBoost.csv'
-OUTPUT_LR_ACS_PREDICTION_RESULT_ON_FINAL_PS_SCORE_XGBOOST_DATASET_PATH = 'C:/Users/CCADD/Documents/GitHub/propensity_acs_project_10185/raw_experiment_results/acs_prediction/ps_score_dataset/final_ps_XGBoost_dataset/OUTPUT_LR_acs_prediction_on_final_ps_score_XGBoost_dataset.csv'
-ACCURACY_LR_ACS_PREDICTION_RESULT_ON_FINAL_PS_SCORE_XGBOOST_DATASET_PATH = 'C:/Users/CCADD/Documents/GitHub/propensity_acs_project_10185/raw_experiment_results/acs_prediction/ps_score_dataset/final_ps_XGBoost_dataset/ACCURACY_LR_acs_prediction_on_final_ps_score_XGBoost_dataset.csv'
-
-# FINAL_PS_DNN_DATASET
-FINAL_PS_DNN_DATASET_PATH = 'C:/Users/CCADD/Documents/GitHub/propensity_acs_project_10185/propensity_acs_project/datasets/acs_prediction/ps_score_dataset/final_ps_DNN.csv'
-OUTPUT_LR_ACS_PREDICTION_RESULT_ON_FINAL_PS_SCORE_DNN_DATASET_PATH = 'C:/Users/CCADD/Documents/GitHub/propensity_acs_project_10185/raw_experiment_results/acs_prediction/ps_score_dataset/final_ps_DNN_dataset/OUTPUT_LR_acs_prediction_on_final_ps_score_DNN_dataset.csv'
-ACCURACY_LR_ACS_PREDICTION_RESULT_ON_FINAL_PS_SCORE_DNN_DATASET_PATH = 'C:/Users/CCADD/Documents/GitHub/propensity_acs_project_10185/raw_experiment_results/acs_prediction/ps_score_dataset/final_ps_DNN_dataset/ACCURACY_LR_acs_prediction_on_final_ps_score_DNN_dataset.csv'
-
-
-# FINAL_P0_LSTM_DATASET
-FINAL_PS_LSTM_DATASET_PATH = 'C:/Users/CCADD/Documents/GitHub/propensity_acs_project_10185/propensity_acs_project/datasets/acs_prediction/ps_score_dataset/final_ps_LSTM.csv'
-OUTPUT_LR_ACS_PREDICTION_RESULT_ON_FINAL_PS_SCORE_LSTM_DATASET_PATH = 'C:/Users/CCADD/Documents/GitHub/propensity_acs_project_10185/raw_experiment_results/acs_prediction/ps_score_dataset/final_ps_LSTM_dataset/OUTPUT_LR_acs_prediction_on_final_ps_score_LSTM_dataset.csv'
-ACCURACY_LR_ACS_PREDICTION_RESULT_ON_FINAL_PS_SCORE_LSTM_DATASET_PATH = 'C:/Users/CCADD/Documents/GitHub/propensity_acs_project_10185/raw_experiment_results/acs_prediction/ps_score_dataset/final_ps_LSTM_dataset/ACCURACY_LR_acs_prediction_on_final_ps_score_LSTM_dataset.csv'
-
-
-# BINARY_DATASET_PATH
-BINARY_DATASET_PATH = 'C:/Users/CCADD/Documents/GitHub/propensity_acs_project_10185/propensity_acs_project/datasets/acs_prediction/binary_dataset/final_dataset_collapsed - acs_label.csv'
-OUTPUT_LR_ACS_PREDICTION_RESULT_ON_BINARY_DATASET_PATH = 'C:/Users/CCADD/Documents/GitHub/propensity_acs_project_10185/raw_experiment_results/acs_prediction/binary_dataset/OUTPUT_LR_acs_prediction_result_on_binary_dataset.csv'
-ACCURACY_LR_ACS_PREDICTION_RESULT_ON_BINARY_DATASET_PATH = 'C:/Users/CCADD/Documents/GitHub/propensity_acs_project_10185/raw_experiment_results/acs_prediction/binary_dataset/ACCURACY_LR_acs_prediction_result_on_binary_dataset.csv'
-
 
 # Initial setting
 pd.set_option('display.max_columns', 500)
@@ -108,8 +76,8 @@ def normalize(df, columns):
 #Data Loading
 ###
 
-profiles = pd.read_csv(FINAL_PS_LSTM_DATASET_PATH)
-dataframe = pd.read_csv(FINAL_PS_LSTM_DATASET_PATH)
+profiles = pd.read_csv()
+dataframe = pd.read_csv()
 results_df = pd.DataFrame()
 
 # acs_label column for training and prediction
@@ -201,6 +169,3 @@ mean_auc_test_set = total_auc_test_set/len(binary_categorical_columns)
 single_column_result_df = pd.DataFrame({'mean':[mean_accuracy_test_set, mean_auc_test_set]})
 results_df = pd.concat([results_df, single_column_result_df], axis=1)
 
-# export to csv
-dataframe.to_csv(OUTPUT_SVM_ACS_PREDICTION_RESULT_ON_FINAL_PS_SCORE_LR_DATASET_PATH, index=False)
-results_df.to_csv(ACCURACY_SVM_ACS_PREDICTION_RESULT_ON_FINAL_PS_SCORE_LR_DATASET_PATH, index=False)
