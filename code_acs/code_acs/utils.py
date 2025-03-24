@@ -4,6 +4,8 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from tabulate import tabulate
 from sklearn.metrics import precision_recall_curve, accuracy_score, confusion_matrix, classification_report, roc_curve, auc
+from imblearn.over_sampling import SMOTE
+from sklearn.preprocessing import MinMaxScaler
 
 def plot_roc(y_test, y_hat_prob):
     plt.figure(figsize = (8, 8))
@@ -86,3 +88,14 @@ def print_score(clf, X_train, y_train, X_test, y_test, train=True):
         print(f"Confusion Matrix: \n {confusion_matrix(y_test, pred_round)}\n")
         print("_______________________________________________")
         print(f"AUC Curve: \n {plot_roc(y_test, pred)}\n")
+        
+def process_dataset(file_path):
+    data = pd.read_csv(file_path)
+    continuous_columns = [col for col in data.columns if set(data[col].unique()) != {0, 1}]
+    X = data.drop(['acs_label_sens'], axis=1)
+    y = data['acs_label_sens']
+    scaler = MinMaxScaler()
+    data[continuous_columns] = scaler.fit_transform(data[continuous_columns])
+    smote = SMOTE()
+    X_sm, y_sm = smote.fit_resample(X, y)
+    return X_sm, y_sm

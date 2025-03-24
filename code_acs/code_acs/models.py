@@ -15,6 +15,8 @@ from sklearn.metrics import accuracy_score, classification_report, precision_sco
 from my_dir.code_acs.utils import plot_confusion_matrix, print_score, plot_pre_curve
 from imblearn.over_sampling import SMOTE
 from sklearn.preprocessing import MinMaxScaler
+        from keras.wrappers.scikit_learn import KerasClassifier
+        from sklearn.model_selection import GridSearchCV
 
 ################
 # Data Loading #
@@ -56,7 +58,7 @@ def spliting_scaling(model_name, X, y, test_size = 0.2, scaler = MinMaxScaler())
         "RF": 0
     }
         
-    if model_name in ['XGBOOST', 'LGBM', 'LR','DNN']:
+    if model_name in ['XGBOOST', 'LGBM', 'LR','DNN', 'CNN']:
         # SMOTE
         smote = SMOTE()
         X, y = smote.fit_resample(X, y)
@@ -241,6 +243,41 @@ def tune_hyperparameter(model_name, X_train, y_train):
 
         return model_dense
     
+    elif model_name == "CNN":
+
+        def create_model(filters, kernel_size, dropout_rate, dense_units):
+            model = keras.Sequential()
+            model.add(keras.layers.Conv1D(filters=filters, kernel_size=kernel_size, activation='relu', input_shape=(X_train.shape[1], 1)))
+            model.add(keras.layers.Dropout(dropout_rate))
+            model.add(keras.layers.MaxPooling1D(pool_size=2))
+            model.add(keras.layers.Flatten())
+            model.add(keras.layers.Dense(dense_units, activation='relu'))
+            model.add(keras.layers.Dense(1, activation='sigmoid'))
+            model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+            return model
+
+        model = KerasClassifier(build_fn=create_model, epochs=20, batch_size=32, verbose=0)
+        
+        param_grid = {
+            'filters': [16, 32, 64],
+            'kernel_size': [2, 3, 4, 5],
+            'dropout_rate': [0.1, 0.2, 0.3, 0.4, 0.5],
+            'dense_units': [16, 32, 64],
+            'padding': 'same'
+            'strides': [1, 2, 3],
+            'learning_rate': [0.001, 0.01, 0.1] 
+        }
+
+        X_train_reshaped = reshape_data_for_cnn(X_train)
+        grid = GridSearchCV(estimator=model, param_grid=param_grid, cv=3)
+        grid_result = grid.fit(X_train_reshaped, y_train)
+
+        print("Best CNN parameters:", grid_result.best_params_)
+
+        return grid_result.best_estimator_, grid_result.best_params_
+        
+        
+    
     return mdl, grid.best_params_
 
 ############
@@ -366,6 +403,51 @@ def training_model(model_name, X_train, X_test, y_train, y_test):
         print_score(model_dense, X_train, y_train, X_test, y_test, train=False)
         [loss, accuracy] = model_dense.evaluate(X_test, y_test, verbose=0)
         [loss, accuracy][1:]
+        
+    elif model_name == 'CNN':
+        # Reshape input data
+        X_train_reshaped = reshape_data_for_cnn(X_train)
+        X_test_reshaped = reshape_data_for_cnn(X_test)
+
+        # Tune hyperparameters and get the best model
+        model, params = tune_hyperparameter(model_name, X_train, y_train)
+
+        # Fit model
+        history = model.fit(X_train_reshaped, y_train, validation_split=0.2, verbose=1)
+
+        # Plot training history
+        plt.plot(history.history['accuracy'])
+        plt.plot(history.history['val_accuracy'])
+        plt.title('CNN model accuracy')
+        plt.ylabel('Accuracy')
+        plt.xlabel('Epoch')
+        plt.legend(['Train', 'Val'], loc='upper left')
+        plt.show()
+
+        plt.plot(history.history['loss'])
+        plt.plot(history.history['val_loss'])
+        plt.title('CNN model loss')
+        plt.ylabel('Loss')
+        plt.xlabel('Epoch')
+        plt.legend(['Train', 'Val'], loc='upper left')
+        plt.show()
+
+        # Evaluate
+        yhat_probs = model.predict(X_test_reshaped)
+        yhat_classes = (yhat_probs > 0.5).astype(int)
+
+        auc = roc_auc_score(y_test, yhat_probs)
+        accuracy = accuracy_score(y_test, yhat_classes)
+        precision = precision_score(y_test, yhat_classes)
+        recall = recall_score(y_test, yhat_classes)
+        f1 = f1_score(y_test, yhat_classes)
+
+        print(f"ROC AUC: {auc:.6f}")
+        print(f"Accuracy: {accuracy:.6f}")
+        print(f"Precision: {precision:.6f}")
+        print(f"Recall: {recall:.6f}")
+        print(f"F1 Score: {f1:.6f}")
+        
 
 ###############################
 # HP TUNING FUNCTIONS FOR DNN #
@@ -432,3 +514,79 @@ def grid_search_dnn(param_grids, input_shape, X_train, y_train, column_name):
     print(column_name + ' ---> HyperParameters: {}'.format(hps))
     
     return model_dense
+
+
+def process_dataset_for_cnn(dataset):
+    # Assuming you have defined process_dataset function already
+    X_sm, y_sm = process_dataset(dataset)
+    return train_test_split(X_sm, y_sm, test_size=0.2, random_state=65)
+
+def reshape_data_for_cnn(X_data):
+    sample_size = X_data.shape[0]
+    time_steps = X_data.shape[1]
+    input_dimension = 1
+    data_reshaped = X_data.to_numpy().reshape(sample_size, time_steps, input_dimension)
+    return data_reshaped
+
+def build_conv1D_model(input_shape):
+    model = keras.Sequential(name="model_conv1D")
+    model.add(keras.layers.Input(shape=input_shape))
+    model.add(keras.layers.Conv1D(filters=64, kernel_size=3, strides=2, activation='relu', name="Conv1D_1"))
+    model.add(keras.layers.Dropout(0.5))
+    model.add(keras.layers.Conv1D(filters=32, kernel_size=3, strides=2, activation='relu', name="Conv1D_2"))
+    model.add(keras.layers.Conv1D(filters=16, kernel_size=3, strides=2, activation='relu', name="Conv1D_3"))
+    model.add(keras.layers.MaxPooling1D(pool_size=2, name="MaxPooling1D"))
+    model.add(keras.layers.Flatten())
+    model.add(keras.layers.Dense(32, activation='relu', name="Dense_1"))
+    model.add(keras.layers.Dense(1, activation='sigmoid', name="Dense_2"))
+
+    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+    return model
+
+def evaluate_cnn_on_datasets(datasets):
+    aggregated_results = {}
+
+    for dataset in datasets:
+        X_train, X_test, y_train, y_test = process_dataset_for_cnn(dataset)
+        X_train_reshaped = reshape_data_for_cnn(X_train)
+        X_test_reshaped = reshape_data_for_cnn(X_test)
+
+        input_shape = (X_train_reshaped.shape[1], X_train_reshaped.shape[2])
+        model_conv1D = build_conv1D_model(input_shape)
+
+        history = model_conv1D.fit(X_train_reshaped, y_train, epochs=50, validation_split=0.2, verbose=1)
+
+        yhat_probs = model_conv1D.predict(X_test_reshaped)
+        yhat_classes = (yhat_probs > 0.5).astype(int)
+
+        dataset_name = os.path.basename(dataset)
+        print(f"\nResults for {dataset_name}:\n{'='*40}")
+
+        # Compute the metrics
+        auc = roc_auc_score(y_test, yhat_probs)
+        accuracy = accuracy_score(y_test, yhat_classes)
+        precision = precision_score(y_test, yhat_classes)
+        recall = recall_score(y_test, yhat_classes)
+        f1 = f1_score(y_test, yhat_classes)
+
+        print(f"ROC AUC: {auc:.6f}")
+        print(f"Accuracy: {accuracy:.6f}")
+        print(f"Precision: {precision:.6f}")
+        print(f"Recall: {recall:.6f}")
+        print(f"F1 Score: {f1:.6f}")
+
+        aggregated_results[dataset_name] = {
+            'ROC AUC': auc,
+            'Accuracy': accuracy,
+            'Precision': precision,
+            'Recall': recall,
+            'F1 Score': f1
+        }
+
+    print("\nSummary of results:")
+    for dataset, metrics in aggregated_results.items():
+        print(f"\n{dataset}:")
+        for metric_name, metric_value in metrics.items():
+            print(f"{metric_name} = {metric_value:.6f}")
+
+    return aggregated_results
