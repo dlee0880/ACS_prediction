@@ -16,52 +16,27 @@ warnings.simplefilter('ignore')
 
 def main(model_name):
     parent_dir_dict = {
-        "XGBOOST": "C:/Users/CCADD/Documents/GitHub/final_propensity_acs_project_XGBoost/models/",
-        "LGBM": ".../final_propensity_acs_project_LGBM/",
+        "XGBOOST": "",
+        "LGBM": "",
         "DNN": "",
         "LSTM": "",
         "LR": ""
     }
 
     data_path = {
-    "LSTM": 'C:/Users/CCADD/Documents/GitHub/final_propensity_acs_project_LSTM - Copy/dataset/propensity_score_estimate/new_basetable_ps_timestep.csv',
-    "DNN": 'C:/Users/CCADD/Documents/GitHub/final_propensity_acs_project_DNN - Copy/dataset/propensity_score_estimate/final_dataset_collapsed.csv',
-    "XGBOOST": 'C:/Users/CCADD/Documents/GitHub/final_propensity_acs_project_XGBoost/dataset/propensity_score_estimate/final_dataset_collapsed.csv',
-    "LR": 'C:/Users/CCADD/Documents/GitHub/final_propensity_acs_project_LR/dataset/propensity_score_estimate/final_dataset_collapsed.csv',
-    "LGBM": '.../final_dataset_collapsed.csv'
+    "LSTM": '',
+    "DNN": '',
+    "XGBOOST": '',
+    "LR": '',
+    "LGBM": ''
     }
 
     binary_categorical_columns_dict = {
-    "LSTM": [
-        'a10ba', 'a10bb', 'a10bf', 'a10bg', 'a10bh', 'a01ad', 'a02ba', 'a03ax', 
-        'a03fa', 'b01ac', 'c01bb', 'c01ca', 'c01da', 'c03aa', 'c03ca', 'c03da', 'c07aa', 'c07ab', 'c07ag', 
-        'c08ca', 'c08db', 'c09aa', 'c09ca', 'c10aa', 'c22', 'e78', 'h25', 'h36', 'i10', 'i20', 'i63', 'k74', 
-        'n02ab', 'n18', 'r69'
-        ],
-        "DNN": [
-        'a10ba', 'a10bb', 'a10bf', 'a10bg', 'a10bh', 'a01ad', 'a02ba', 'a03ax', 'a03fa', 'b01ac', 
-            'c01bb', 'c01ca', 'c01da', 'c03aa', 'c03ca', 'c03da', 'c07aa', 'c07ab', 'c07ag', 'c08ca', 
-            'c08db', 'c09aa', 'c09ca', 'c10aa', 'n02ab', 'c22', 'e78', 'h25', 'h36', 'i10', 'i20', 
-            'i63', 'k74', 'n18', 'r69'
-        ],
-        "XGBOOST": [
-        'a10ba', 'a10bb', 'a10bf', 'a10bg', 'a10bh', 'a01ad', 'a02ba', 'a03ax', 
-        'a03fa', 'b01ac', 'c01bb', 'c01ca', 'c01da', 'c03aa', 'c03ca', 'c03da', 'c07aa', 'c07ab', 'c07ag', 
-        'c08ca', 'c08db', 'c09aa', 'c09ca', 'c10aa', 'c22', 'e78', 'h25', 'h36', 'i10', 'i20', 'i63', 'k74', 
-        'n02ab', 'n18', 'r69'
-        ],
-        "LR": [
-        'a10ba', 'a10bb', 'a10bf', 'a10bg', 'a10bh', 'a01ad', 'a02ba', 'a03ax', 
-        'a03fa', 'b01ac', 'c01bb', 'c01ca', 'c01da', 'c03aa', 'c03ca', 'c03da', 'c07aa', 'c07ab', 'c07ag', 
-        'c08ca', 'c08db', 'c09aa', 'c09ca', 'c10aa', 'c22', 'e78', 'h25', 'h36', 'i10', 'i20', 'i63', 'k74', 
-        'n02ab', 'n18', 'r69'
-        ],
-        "LGBM": [
-        'a10ba', 'a10bb', 'a10bf', 'a10bg', 'a10bh', 'a01ad', 'a02ba', 'a03ax', 
-        'a03fa', 'b01ac', 'c01bb', 'c01ca', 'c01da', 'c03aa', 'c03ca', 'c03da', 'c07aa', 'c07ab', 'c07ag', 
-        'c08ca', 'c08db', 'c09aa', 'c09ca', 'c10aa', 'c22', 'e78', 'h25', 'h36', 'i10', 'i20', 'i63', 'k74', 
-        'n02ab', 'n18', 'r69'
-        ]
+    "LSTM": [],
+        "DNN": [],
+        "XGBOOST": [],
+        "LR": [],
+        "LGBM": []
     }
 
     #Data Loading
