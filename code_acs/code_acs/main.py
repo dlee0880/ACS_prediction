@@ -19,12 +19,12 @@ def main(model_name):
         print(results_cnn)
     else:
         data_path = {
-            "XGBOOST": 'C:/Users/user/Desktop/final_dataset_collapsed.csv',
-            "DNN": 'C:/Users/user/Desktop/final_dataset_collapsed.csv',
-            "LGBM": 'C:/Users/user/Desktop/20%_false_negative_raw.csv',
-            "LR": 'C:/Users/CCADD/Documents/GitHub/propensity_acs_project_10185/propensity_acs_project/datasets/acs_prediction/binary_dataset/final_acs_prediction_binary_dataset.csv',
-            "SVM": 'C:/Users/CCADD/Documents/GitHub/propensity_acs_project_10185/propensity_acs_project/datasets/acs_prediction/ps_score_dataset/final_ps_DNN.csv',
-            "RF": 'C:/Users/CCADD/Documents/GitHub/propensity_acs_project_10185/propensity_acs_project/datasets/acs_prediction/ps_score_dataset/final_ps_XGBoost.csv'
+            "XGBOOST": '',
+            "DNN": '',
+            "LGBM": '',
+            "LR": '',
+            "SVM": '',
+            "RF": ''
         }
 
         label_col = {
